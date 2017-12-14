@@ -1,0 +1,28 @@
+{
+  "name": "chatgamejs",
+  "version": "1.0.0",
+  "description": "Web chat based game",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fr0zenHeart/chatgamejs.git"
+  },
+  "keywords": [
+    "nodejs",
+    "game",
+    "chat"
+  ],
+  "author": "Daniel Reis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Fr0zenHeart/chatgamejs/issues"
+  },
+  "homepage": "https://github.com/Fr0zenHeart/chatgamejs#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "socket.io": "^2.0.4"
+  }
+}
