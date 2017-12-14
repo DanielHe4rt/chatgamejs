@@ -19,6 +19,7 @@ io.sockets.on('connection',function(socket){
 	SOCKET_LIST[socket.id] = socket;
 	socket.on('disconnect',function(){
 		delete SOCKET_LIST[socket.id];
+		
 	})
 })
 
