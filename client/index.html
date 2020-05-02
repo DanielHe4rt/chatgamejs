@@ -1,43 +1,20 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>eae</title>
-</head>
-<body>
-<canvas id="ctx" width="500" height="500" style="border: 1px solid black"></canvas>
-<p id="teclado" hidden>Teclado</p>
+  <head>
+    <title>eae</title>
+  </head>
+  <body>
+    <img id="sprites" src="sprites.png" />
+    <canvas
+      id="ctx"
+      width="500"
+      height="500"
+      style="border: 1px solid black;"
+    ></canvas>
+    <p id="teclado" hidden>Teclado</p>
 
-<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script>
-
-var ctx = document.getElementById("ctx").getContext("2d");
-ctx.font = '30px Arial';
-var socket = io(); 
-let teclado = false;
-socket.on('posicoes',function(data){
-	//console.log(data);
-	ctx.clearRect(0,0,500,500);
-	for(var i = 0; i < data.length; i++){
-		ctx.fillText('P',data[i].x,data[i].y)
-	}
-})
-$(document).on("keydown",function(event){
-	if(event.key === "Enter"){
-		teclado = !teclado
-	}
-	if(teclado){
-		$("#teclado").prop("hidden",false);
-	}else{
-		$("#teclado").prop("hidden",true);
-		socket.emit('movement',{tecla: event.key, pressionado: true});
-	}
-	
-})
-$(document).on("keyup",function(event){
-	socket.emit('movement',{tecla: event.key, pressionado: false});
-})
-
-</script>
-</body>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="game.js"></script>
+  </body>
 </html>

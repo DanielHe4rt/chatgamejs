@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/Fr0zenHeart/chatgamejs#readme",
   "dependencies": {
-    "express": "^4.16.2",
-    "socket.io": "^2.0.4"
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
   }
 }

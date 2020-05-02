@@ -1,51 +1,62 @@
-var express = require('express')
+var express = require("express");
 var app = express();
-var serv = require('http').Server(app)
-var SOCKET_LIST = {};
-app.get('/',function(req,res){
-	res.sendFile(__dirname + '/client/index.html')
-})
-app.use('/client',express.static(__dirname + '/client'))
+var serv = require("http").Server(app);
+let socketList = [];
+
+app.use(express.static("client"));
+app.get("/", function (req, res) {
+  res.sendFile(__dirname + "/client/index.html");
+});
 
 serv.listen(2000);
-console.log("Servidor Online!")
+console.log("Servidor Online!");
 let playerSpeed = 10;
-var io = require('socket.io')(serv,{});
-io.sockets.on('connection',function(socket){
-	console.log("Jogador Conectado!");
-	socket.id = Math.random();
-	socket.x = 250;
-	socket.y = 250;
-	SOCKET_LIST[socket.id] = socket;
-	socket.on('movement',function(data){
-		console.log(data);
-		if(data.tecla === "s" || data.tecla === "S"){
-			socket.y += playerSpeed;
-		}else if(data.tecla === "W" || data.tecla === "w"){
-			socket.y -= playerSpeed;
-		}else if(data.tecla === "d" || data.tecla === "D"){
-			socket.x += playerSpeed;
-		}else if(data.tecla === "a" || data.tecla === "A"){
-			socket.x -= playerSpeed;
-		}
-	});
-	socket.on('disconnect',function(){
-		delete SOCKET_LIST[socket.id];
-	})
-})
+let io = require("socket.io")(serv, {});
+io.sockets.on("connection", function (socket) {
+  console.log("Jogador Conectado!");
+  socket.x = Math.floor(Math.random() * 250 + 1);
+  socket.y = Math.floor(Math.random() * 250 + 1);
+  socket.spritePos = 48;
+  socketList.push(socket);
 
-setInterval(function(){
-	var pacote = []
-	for(var i in SOCKET_LIST){
-		var socket = SOCKET_LIST[i];
-		
-		pacote.push({
-			x: socket.x,
-			y: socket.y
-		});
-	}
-	for(var i in SOCKET_LIST){
-		var socket = SOCKET_LIST[i];
-		socket.emit('posicoes',pacote);
-	}
-},1000/25);
+  socket.on("movement", function (data) {
+    console.log(data);
+    let key = data.keyPressed.toLowerCase();
+
+    switch (key) {
+      case "s":
+        socket.y += playerSpeed;
+        break;
+      case "w":
+        socket.y -= playerSpeed;
+        break;
+      case "w":
+        socket.y -= playerSpeed;
+        break;
+      case "d":
+        socket.x += playerSpeed;
+        break;
+      case "a":
+        socket.x -= playerSpeed;
+        break;
+    }
+  });
+  socket.on("disconnect", () => {
+    socketList = socketList.filter((player) => player.id !== socket.id);
+  });
+});
+
+setInterval(function () {
+  var playersPackage = [];
+
+  socketList.forEach((socketPlayer) => {
+    playersPackage.push({
+      x: socketPlayer.x,
+      y: socketPlayer.y,
+      spritePos: socketPlayer.spritePos,
+    });
+  });
+  socketList.forEach((socket) => {
+    socket.emit("positions", playersPackage);
+  });
+}, 1000 / 25);
